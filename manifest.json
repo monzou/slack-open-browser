@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Slack Open in Browser",
+  "version": "0.1.0",
+  "description": "Open Slack links in the browser, not the app, by auto-clicking the \"use Slack in your browser\" link.",
+  "content_scripts": [
+    {
+      "js": ["content.js"],
+      "matches": ["https://app.slack.com/*"],
+      "run_at": "document_start"
+    }
+  ]
+}
