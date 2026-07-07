@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Editor (Zed)
+.zed/
+*.swp
+
+# Local Claude Code settings and skills
+.claude/
