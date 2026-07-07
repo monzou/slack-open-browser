@@ -9,7 +9,7 @@ Slack currently handles message links with the following flow:
 1. `xxx.slack.com/archives/...` → Slack shows a "Launching &lt;workspace&gt;" interstitial (`data-qa="ssb_redirect_loading_page"`) **on the workspace domain itself** and fires a `slack://` deep link to launch the desktop app.
 2. That interstitial offers an "open this link in your browser" escape link, which carries a `skip_today` query param. Clicking it opens the message in `app.slack.com/client/...` and tells Slack to skip the interstitial for the rest of the day.
 
-Existing similar extensions (e.g. "Open Slack in Browser, not App") inject their content script only into `*.slack.com/archives/*` and look for a link on `app.slack.com`, so they never run against the interstitial as it is actually rendered today. This extension injects into `*.slack.com` (the interstitial lives on the workspace domain such as `uzabase.slack.com`) and excludes `app.slack.com`, which is only the destination the link opens — the web client itself never shows this interstitial, so there is no reason to run there.
+Existing similar extensions (e.g. "Open Slack in Browser, not App") inject their content script into `*.slack.com/archives/*` but look for a link on `app.slack.com`, so they never run against the interstitial as it is actually rendered today. This extension injects into `https://*.slack.com/archives/*` — the message-link paths where the interstitial actually renders. That covers every workspace subdomain (e.g. `uzabase.slack.com`) without also running on the heavy web client (`app.slack.com/client`) or on service subdomains such as `files.slack.com` and `api.slack.com`.
 
 ## How it works
 

@@ -11,9 +11,10 @@
 //
 // The escape link has no data-qa of its own, so we match it by its skip_today
 // query param, scoped to the interstitial container so we never click a stray
-// link elsewhere in the web client.
+// link elsewhere in the page. We exclude skip_today=0 so that if Slack ever
+// renders a "don't skip" control alongside it, we can't click the wrong one.
 const BROWSER_LINK_SELECTOR =
-  '[data-qa="ssb_redirect_loading_page"] a[href*="skip_today"]';
+  '[data-qa="ssb_redirect_loading_page"] a[href*="skip_today"]:not([href*="skip_today=0"])';
 
 // The interstitial only appears during the initial page load, but there is no
 // reliable DOM signal for "it will no longer appear", so fall back to a
@@ -43,8 +44,10 @@ const observer = new MutationObserver(() => {
 
 // The interstitial is a small server-rendered page, so the link may already be
 // present when this content script runs at document_start. Try once up front;
-// otherwise watch for it to be rendered, giving up after the timeout.
+// otherwise watch for it to be rendered, giving up after the timeout. We
+// observe `document` rather than `document.documentElement`, which can still be
+// null in the earliest document_start slice.
 if (!clickBrowserLink()) {
-  observer.observe(document.documentElement, { childList: true, subtree: true });
+  observer.observe(document, { childList: true, subtree: true });
   timeoutId = setTimeout(() => observer.disconnect(), OBSERVE_TIMEOUT_MS);
 }
