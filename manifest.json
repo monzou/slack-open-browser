@@ -6,7 +6,8 @@
   "content_scripts": [
     {
       "js": ["content.js"],
-      "matches": ["https://app.slack.com/*"],
+      "matches": ["https://*.slack.com/*"],
+      "exclude_matches": ["https://app.slack.com/*"],
       "run_at": "document_start"
     }
   ]
