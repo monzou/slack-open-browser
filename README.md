@@ -1,6 +1,8 @@
-# Slack Open in Browser
+# Open in Browser for Slack
 
-A Chrome extension that opens Slack message links (`https://xxx.slack.com/archives/...`) in the Slack web client in your browser, instead of launching the Slack desktop app. It also works on Chromium-based browsers such as Dia.
+A Chrome extension that opens Slack message links (`https://xxx.slack.com/archives/...`) in the Slack web client in your browser, instead of launching the Slack desktop app, and highlights the linked message. It also works on Chromium-based browsers such as Dia.
+
+This is an unofficial extension and is not affiliated with, endorsed by, or sponsored by Slack Technologies, LLC or Salesforce, Inc.
 
 ## Background
 
