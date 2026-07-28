@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Master icon: a chat bubble (Slack message) with an arrow escaping to the
+       top right (open in browser). The bubble outline is left open at the
+       top right so the arrow visually exits it. -->
+  <rect width="128" height="128" rx="28" fill="#4A154B"/>
+  <path d="M88 66 V78 a14 14 0 0 1 -14 14 H48 l-16 12 v-12 a14 14 0 0 1 -14 -14 V50 a14 14 0 0 1 14 -14 h22"
+        fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M64 64 L100 28" fill="none" stroke="#ECB22E" stroke-width="12" stroke-linecap="round"/>
+  <path d="M76 24 h28 v28" fill="none" stroke="#ECB22E" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
