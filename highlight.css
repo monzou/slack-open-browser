@@ -1,0 +1,32 @@
+/* Temporary highlight applied by highlight.js to the target message of a
+ * message link: hold a translucent yellow for a few seconds, then fade out.
+ *
+ * The animation runs on both the tagged list item and the message background
+ * inside it — the background can mount after the item is tagged, and
+ * depending on the theme either can be the opaque surface that would cover
+ * the other's paint. A translucent tone is used so it reads on both light and
+ * dark themes. Animated properties win over Slack's own static background
+ * declarations while the animation runs — and only while it runs (no fill
+ * mode), so Slack's background comes back untouched when the fade ends and no
+ * !important is needed. */
+@keyframes slack-open-browser-highlight-fade {
+  0%,
+  55% {
+    background-color: rgba(242, 199, 68, 0.1);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.slack-open-browser-highlight,
+.slack-open-browser-highlight .c-message_kit__background {
+  /* Duration must stay in sync with FADE_MS in highlight.js. */
+  animation: slack-open-browser-highlight-fade 6s ease-out;
+  /* highlight.js sets the custom property to a negative offset when it tags a
+   * node after the fade already started (a recycled or class-stripped row),
+   * so the animation resumes mid-fade instead of restarting. Declared after
+   * the shorthand, which would otherwise reset the delay; inherits to the
+   * descendant. */
+  animation-delay: var(--slack-open-browser-elapsed, 0ms);
+}

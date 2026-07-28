@@ -9,7 +9,7 @@ Slack currently handles message links with the following flow:
 1. `xxx.slack.com/archives/...` → Slack shows a "Launching &lt;workspace&gt;" interstitial (`data-qa="ssb_redirect_loading_page"`) **on the workspace domain itself** and fires a `slack://` deep link to launch the desktop app.
 2. That interstitial offers an "open this link in your browser" escape link, which carries a `skip_today` query param. Clicking it opens the message in `app.slack.com/client/...` and tells Slack to skip the interstitial for the rest of the day.
 
-Existing similar extensions (e.g. "Open Slack in Browser, not App") inject their content script into `*.slack.com/archives/*` but look for a link on `app.slack.com`, so they never run against the interstitial as it is actually rendered today. This extension injects into `https://*.slack.com/archives/*` — the message-link paths where the interstitial actually renders. That covers every workspace subdomain (e.g. `uzabase.slack.com`) without also running on the heavy web client (`app.slack.com/client`) or on service subdomains such as `files.slack.com` and `api.slack.com`.
+Existing similar extensions (e.g. "Open Slack in Browser, not App") inject their content script into `*.slack.com/archives/*` but look for a link on `app.slack.com`, so they never run against the interstitial as it is actually rendered today. This extension injects into `https://*.slack.com/archives/*` — the message-link paths where the interstitial actually renders. That covers every workspace subdomain (e.g. `uzabase.slack.com`) without also running the redirect script on the heavy web client (`app.slack.com/client`) or on service subdomains such as `files.slack.com` and `api.slack.com`. (The separate highlight script described below is the one exception: it runs on `app.slack.com/client/*` and exits immediately when the URL carries no message timestamp.)
 
 ## How it works
 
@@ -19,6 +19,14 @@ The link has no stable `data-qa` of its own, so it is matched by its `skip_today
 
 Clicking the link (rather than navigating to its href) lets Slack persist the "open in browser today" state (`skip_today`), so subsequent links on the same day open directly in the browser without the interstitial.
 
+### Highlighting the target message
+
+After the redirect lands on the web client (`app.slack.com/client/...`), Slack scrolls to the target message but gives little visual indication of which one it is. A second content script (`highlight.js` + `highlight.css`) fixes this:
+
+1. At `document_start` — before the SPA boots and rewrites the URL — it extracts the target message timestamp from the path (`/p<10 digits><6 digits>`, or a bare `<10>.<6>` segment).
+2. It watches the DOM for the message node carrying that timestamp (`data-item-key` / `id`, matched by suffix since thread panes prefix the value with the channel id).
+3. Once the node renders, it applies a translucent yellow highlight that holds for a few seconds and fades out. Until the fade completes, a node that loses the highlight (the virtual list recycling the row, or Slack rewriting the row's classes) is re-tagged with a resume offset so the fade continues where it left off instead of restarting.
+
 ## Installation
 
 1. Open the extension management page
@@ -27,7 +35,7 @@ Clicking the link (rather than navigating to its href) lets Slack persist the "o
 2. Enable "Developer mode"
 3. Click "Load unpacked" and select this folder
 
-After editing the extension (or pulling an update), click the reload icon on its card so the new `manifest.json` and `content.js` take effect.
+After editing the extension (or pulling an update), click the reload icon on its card so the new `manifest.json`, content scripts, and CSS take effect.
 
 If the "Open Slack in Browser, not App" extension is installed, disable it. It never runs on the current message-link flow, but it still injects into other `*.slack.com/archives/*` pages, where it can navigate away or show its failure alert unexpectedly.
 
@@ -40,3 +48,5 @@ While Slack's `skip_today` state is active (after choosing "use browser" once th
 - Depending on the timing of the `slack://` deep link versus the auto-click, the OS-level "Open Slack.app?" dialog may still appear (the browser navigation itself completes behind the dialog)
 - If Slack changes the interstitial DOM (the container `data-qa` or the `skip_today` param), the selector will need to be updated
 - The extension watches for the link for 15 seconds per page load; if the interstitial renders later than that (e.g. on a very slow connection), it is not clicked
+- The highlight relies on the web client exposing the message timestamp in `data-item-key` / `id` and on the URL still containing the timestamp at `document_start`; if Slack changes either, the highlight silently does nothing (the redirect itself is unaffected)
+- The highlight only runs on a fresh page load of `app.slack.com/client/...` (the redirect case); clicking a message link while the web client is already open navigates in-SPA and is not highlighted
