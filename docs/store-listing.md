@@ -121,7 +121,8 @@ what is actually submitted.
 | Asset | File | Status |
 | --- | --- | --- |
 | Icon 128×128 | `icons/icon128.png` | ready |
-| Screenshot 1280×800 | `assets/screenshot-1280x800.png` | ready |
+| Screenshot 1280×800 (store) | `assets/screenshot-1280x800.png` | ready |
+| Screenshot 2560×1600 (@2x, README / SNS) | `assets/screenshot-2560x1600.png` | ready |
 | Small promo tile 440×280 (optional) | — | not made |
 | Marquee 1400×560 (optional) | — | not made |
 
