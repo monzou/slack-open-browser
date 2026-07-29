@@ -4,6 +4,10 @@ A Chrome extension that opens Slack message links (`https://xxx.slack.com/archiv
 
 This is an unofficial extension and is not affiliated with, endorsed by, or sponsored by Slack Technologies, LLC or Salesforce, Inc.
 
+**[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/open-in-browser-for-slack/jedaiikabimmnoilijklpagegbpeognn)**
+
+![Skips the "Launching Slack…" page and highlights the linked message](assets/screenshot-1280x800.png)
+
 ## Background
 
 Slack currently handles message links with the following flow:
@@ -31,11 +35,19 @@ After the redirect lands on the web client (`app.slack.com/client/...`), Slack s
 
 ## Installation
 
+### From the Chrome Web Store (recommended)
+
+Install from the [Chrome Web Store page](https://chromewebstore.google.com/detail/open-in-browser-for-slack/jedaiikabimmnoilijklpagegbpeognn).
+
+### From source (development)
+
 1. Open the extension management page
    - Chrome: `chrome://extensions`
    - Dia: open Extensions from the menu (equivalent to `chrome://extensions`)
 2. Enable "Developer mode"
 3. Click "Load unpacked" and select this folder
+
+If you install both, disable one of them — two copies would race to click the same link.
 
 After editing the extension (or pulling an update), click the reload icon on its card so the new `manifest.json`, content scripts, and CSS take effect.
 

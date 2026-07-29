@@ -1,5 +1,8 @@
 # Chrome Web Store listing
 
+Published at:
+https://chromewebstore.google.com/detail/open-in-browser-for-slack/jedaiikabimmnoilijklpagegbpeognn
+
 Copy-paste material for the Developer Dashboard. Keep this file in sync with
 what is actually submitted.
 
