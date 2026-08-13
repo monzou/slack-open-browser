@@ -33,6 +33,14 @@ After the redirect lands on the web client (`app.slack.com/client/...`), Slack s
 2. It watches the DOM for the message node carrying that timestamp (`data-item-key` / `id`, matched by suffix since thread panes prefix the value with the channel id).
 3. Once the node renders, it applies a translucent yellow highlight that holds for a few seconds and fades out. Until the fade completes, a node that loses the highlight (the virtual list recycling the row, or Slack rewriting the row's classes) is re-tagged with a resume offset so the fade continues where it left off instead of restarting.
 
+### Recovering when the client loses the link
+
+Occasionally the web client finishes booting into the channel without ever loading the linked message — you land on the right channel, at the wrong position, with no highlight. On Enterprise Grid the URL is rewritten from the workspace id (`/client/T…/`) to the org id (`/client/E…/`) while the client boots, and if routing has not consumed the deep link before the URL is normalised, the timestamp is dropped and the message is never fetched. It is a race, so it strikes intermittently; a cold, slow load loses more often than a warm one.
+
+Once the timestamp is gone from the URL, Slack has no way back — but the highlight script still holds it, captured at `document_start`. So when the timestamp disappears from the URL (routing has committed) and the message still has not rendered a few seconds later, the script reloads the last URL that still carried the timestamp. That retry is warm and starts from the org-form URL, skipping the redirect the first attempt raced with. It is the same thing you would otherwise do by hand: click the link again.
+
+The retry is flagged in `sessionStorage`, so it happens at most once per tab per message and cannot loop, and it is skipped entirely once you have typed or clicked on the page (a reload would take a half-written message with it).
+
 ## Installation
 
 ### From the Chrome Web Store (recommended)
@@ -64,3 +72,4 @@ While Slack's `skip_today` state is active (after choosing "use browser" once th
 - The extension watches for the link for 15 seconds per page load; if the interstitial renders later than that (e.g. on a very slow connection), it is not clicked
 - The highlight relies on the web client exposing the message timestamp in `data-item-key` / `id` and on the URL still containing the timestamp at `document_start`; if Slack changes either, the highlight silently does nothing (the redirect itself is unaffected)
 - The highlight only runs on a fresh page load of `app.slack.com/client/...` (the redirect case); clicking a message link while the web client is already open navigates in-SPA and is not highlighted
+- The recovery reload is a single retry per tab; if the client loses the deep link twice in a row you end up on the channel without the message, as you would without the extension

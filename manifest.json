@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Open in Browser for Slack",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Open Slack message links in the browser, not the desktop app, and highlight the linked message.",
   "homepage_url": "https://github.com/monzou/slack-open-browser",
   "icons": {
