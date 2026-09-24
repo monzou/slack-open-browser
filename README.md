@@ -6,7 +6,7 @@ This is an unofficial extension and is not affiliated with, endorsed by, or spon
 
 **[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/open-in-browser-for-slack/jedaiikabimmnoilijklpagegbpeognn)**
 
-![Skips the "Launching Slack…" page and highlights the linked message](assets/screenshot-2560x1600.png)
+![Skips the "Launching Slack…" page and highlights the linked message](assets/store/en/screenshot-1@2x.png)
 
 ## Background
 

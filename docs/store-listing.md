@@ -118,12 +118,31 @@ what is actually submitted.
 
 ## Assets
 
+Screenshots and promo tiles are rendered from `assets/store/src/store.html`
+and the icons from `icons/icon.svg`, both with headless Chrome. Edit the
+source, then regenerate:
+
+```sh
+scripts/render-store-assets.sh
+scripts/render-icons.sh
+```
+
+Upload each locale's images to its own listing (English as the default,
+Japanese under the ja locale), in this order:
+
+| # | Asset | EN | JA |
+| --- | --- | --- | --- |
+| 1 | Screenshot 1280×800: launch page skipped → web client | `assets/store/en/screenshot-1.png` | `assets/store/ja/screenshot-1.png` |
+| 2 | Screenshot 1280×800: linked message highlight | `assets/store/en/screenshot-2.png` | `assets/store/ja/screenshot-2.png` |
+| 3 | Screenshot 1280×800: no setup / no popup / no data / open source | `assets/store/en/screenshot-3.png` | `assets/store/ja/screenshot-3.png` |
+| — | Small promo tile 440×280 | `assets/store/en/promo-small-440x280.png` | `assets/store/ja/promo-small-440x280.png` |
+
+Other assets:
+
 | Asset | File | Status |
 | --- | --- | --- |
-| Icon 128×128 | `icons/icon128.png` | ready |
-| Screenshot 1280×800 (store) | `assets/screenshot-1280x800.png` | ready |
-| Screenshot 2560×1600 (@2x, README / SNS) | `assets/screenshot-2560x1600.png` | ready |
-| Small promo tile 440×280 (optional) | — | not made |
+| Icon 128×128 (96×96 artwork + 16px padding) | `icons/icon128.png` | ready |
+| Screenshot 2560×1600 (@2x hero, README / SNS) | `assets/store/en/screenshot-1@2x.png` | ready |
 | Marquee 1400×560 (optional) | — | not made |
 
 ## Submission checklist
